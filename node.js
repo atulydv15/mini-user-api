@@ -2,14 +2,13 @@ const express = require("express");
 const app = express();
 const PORT = 3000;
 
-// Middleware to parse JSON
+
 app.use(express.json());
 
-// In-memory user storage
 let users = [];
 let idCounter = 1;
 
-// 🔥 GLOBAL MIDDLEWARE (runs on every request)
+
 app.use((req, res, next) => {
   const currentTime = new Date().toLocaleString();
   console.log(`Request received at: ${currentTime}`);
@@ -17,7 +16,7 @@ app.use((req, res, next) => {
   next();
 });
 
-// 🟢 ROOT ROUTE
+
 app.get("/", (req, res) => {
   res.json({
     message: "Server Running",
@@ -26,9 +25,7 @@ app.get("/", (req, res) => {
 });
 
 
-// ================= USERS ROUTES ================= //
 
-// 📌 GET ALL USERS
 app.get("/users", (req, res) => {
   res.json({
     message: "Users fetched successfully",
@@ -37,7 +34,7 @@ app.get("/users", (req, res) => {
   });
 });
 
-// 📌 GET USER BY ID (BONUS)
+
 app.get("/users/:id", (req, res) => {
   const id = parseInt(req.params.id);
   const user = users.find((u) => u.id === id);
@@ -56,7 +53,7 @@ app.get("/users/:id", (req, res) => {
   });
 });
 
-// 📌 ADD USER
+
 app.post("/users", (req, res) => {
   const { name, email } = req.body;
 
@@ -68,7 +65,7 @@ app.post("/users", (req, res) => {
     });
   }
 
-  // Duplicate email check
+  
   const exists = users.find((u) => u.email === email);
   if (exists) {
     return res.json({
@@ -92,7 +89,7 @@ app.post("/users", (req, res) => {
   });
 });
 
-// 📌 DELETE USER
+
 app.delete("/users/:id", (req, res) => {
   const id = parseInt(req.params.id);
   const index = users.findIndex((u) => u.id === id);
@@ -113,12 +110,11 @@ app.delete("/users/:id", (req, res) => {
 });
 
 
-// ================= LOGIN ROUTE ================= //
+
 
 app.post("/login", (req, res) => {
   const { email, password } = req.body;
 
-  // Missing fields
   if (!email || !password) {
     return res.json({
       message: "All fields required",
@@ -126,7 +122,7 @@ app.post("/login", (req, res) => {
     });
   }
 
-  // Hardcoded check
+  
   if (email === "admin@gmail.com" && password === "1234") {
     return res.json({
       message: "Login Success",
@@ -141,7 +137,7 @@ app.post("/login", (req, res) => {
 });
 
 
-// 🚀 START SERVER
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
